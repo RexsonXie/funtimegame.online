@@ -356,12 +356,24 @@
                 <h2>Play FunTime Game Online</h2>
                 <div class="game-iframe-container">
                     <iframe 
+                        id="gameFrame"
                         class="game-iframe"
                         src="https://cloud.onlinegames.io/games/2025/unity/funtimegame/index-og.HTML"
                         title="FunTime Game - Play Online"
                         allowfullscreen
-                        loading="lazy">
+                        sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
+                        loading="lazy"
+
                     </iframe>
+                    <div id="gameError" style="display: none; text-align: center; padding: 60px 20px; color: #86868b;">
+                        <div style="font-size: 48px; margin-bottom: 20px;">🎮</div>
+                        <h3 style="margin-bottom: 15px; color: #1d1d1f;">Game Loading Issue</h3>
+                        <p style="margin-bottom: 20px;">The game is temporarily unavailable. Please try one of these options:</p>
+                        <div style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
+                            <button onclick="retryGame()" class="play-button" style="margin: 0;">🔄 Retry</button>
+                            <a href="https://cloud.onlinegames.io/games/2025/unity/funtimegame/" class="play-button" style="margin: 0;" target="_blank">🌐 Direct Link</a>
+                        </div>
+                    </div>
                 </div>
                 <p style="text-align: center; color: #86868b; font-size: 16px;">
                     Click to start your adventure! No download required - play instantly in your browser.
@@ -454,5 +466,91 @@
             </div>
         </div>
     </footer>
+
+    <script>
+        let iframeLoadTimeout;
+        
+        function handleIframeLoad() {
+            clearTimeout(iframeLoadTimeout);
+            document.getElementById('gameError').style.display = 'none';
+            document.getElementById('gameFrame').style.display = 'block';
+        }
+        
+        function handleIframeError() {
+            showGameError();
+        }
+        
+        function showGameError() {
+            document.getElementById('gameFrame').style.display = 'none';
+            document.getElementById('gameError').style.display = 'block';
+        }
+        
+        function retryGame() {
+            const iframe = document.getElementById('gameFrame');
+            const currentSrc = iframe.src;
+            
+            // Clear any existing timeout
+            clearTimeout(iframeLoadTimeout);
+            
+            // Hide error and show iframe
+            document.getElementById('gameError').style.display = 'none';
+            document.getElementById('gameFrame').style.display = 'block';
+            
+            // Force reload by clearing and resetting src
+            iframe.src = '';
+            setTimeout(() => {
+                iframe.src = currentSrc;
+                
+                // Set new timeout for retry attempt
+                iframeLoadTimeout = setTimeout(() => {
+                    showGameError();
+                }, 8000);
+            }, 200);
+        }
+        
+        // Check if iframe loads properly on initial load
+        document.addEventListener('DOMContentLoaded', function() {
+            const iframe = document.getElementById('gameFrame');
+            
+            // Set a timeout to check iframe loading
+            iframeLoadTimeout = setTimeout(() => {
+                // Check if the iframe source is accessible and loaded
+                if (iframe.src && iframe.src !== '') {
+                    // If iframe hasn't triggered load event within 8 seconds, show error
+                    showGameError();
+                }
+            }, 8000);
+            
+            // Listen for iframe load event
+            iframe.addEventListener('load', function() {
+                clearTimeout(iframeLoadTimeout);
+                try {
+                    // Try to access iframe content to verify it loaded successfully
+                    const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+                    if (iframeDoc && iframeDoc.body) {
+                        // Iframe loaded successfully
+                        document.getElementById('gameError').style.display = 'none';
+                        document.getElementById('gameFrame').style.display = 'block';
+                    } else {
+                        // Iframe loaded but content might be blocked
+                        throw new Error('Content blocked');
+                    }
+                } catch (e) {
+                    // Cross-origin or other access error - iframe might still work for user
+                    // Don't show error immediately, let user interact first
+                    console.log('Iframe loaded but content access restricted');
+                }
+            });
+            
+            // Listen for iframe error event
+            iframe.addEventListener('error', function() {
+                clearTimeout(iframeLoadTimeout);
+                showGameError();
+            });
+        });
+        
+        // Remove the unused alternative URL functionality since it's redundant
+        // The direct link button provides better user experience
+    </script>
 </body>
 </html>
