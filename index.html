@@ -468,89 +468,101 @@
     </footer>
 
     <script>
-        let iframeLoadTimeout;
-        
-        function handleIframeLoad() {
-            clearTimeout(iframeLoadTimeout);
-            document.getElementById('gameError').style.display = 'none';
-            document.getElementById('gameFrame').style.display = 'block';
-        }
-        
-        function handleIframeError() {
-            showGameError();
-        }
-        
-        function showGameError() {
-            document.getElementById('gameFrame').style.display = 'none';
-            document.getElementById('gameError').style.display = 'block';
-        }
-        
-        function retryGame() {
-            const iframe = document.getElementById('gameFrame');
-            const currentSrc = iframe.src;
+        (function() {
+            'use strict';
             
-            // Clear any existing timeout
-            clearTimeout(iframeLoadTimeout);
+            let iframeLoadTimeout = null;
             
-            // Hide error and show iframe
-            document.getElementById('gameError').style.display = 'none';
-            document.getElementById('gameFrame').style.display = 'block';
+            function showGameError() {
+                const gameFrame = document.getElementById('gameFrame');
+                const gameError = document.getElementById('gameError');
+                if (gameFrame) gameFrame.style.display = 'none';
+                if (gameError) gameError.style.display = 'block';
+            }
             
-            // Force reload by clearing and resetting src
-            iframe.src = '';
-            setTimeout(() => {
-                iframe.src = currentSrc;
+            function hideGameError() {
+                const gameFrame = document.getElementById('gameFrame');
+                const gameError = document.getElementById('gameError');
+                if (gameError) gameError.style.display = 'none';
+                if (gameFrame) gameFrame.style.display = 'block';
+            }
+            
+            function retryGame() {
+                const iframe = document.getElementById('gameFrame');
+                if (!iframe) return;
                 
-                // Set new timeout for retry attempt
-                iframeLoadTimeout = setTimeout(() => {
-                    showGameError();
-                }, 8000);
-            }, 200);
-        }
-        
-        // Check if iframe loads properly on initial load
-        document.addEventListener('DOMContentLoaded', function() {
-            const iframe = document.getElementById('gameFrame');
-            
-            // Set a timeout to check iframe loading
-            iframeLoadTimeout = setTimeout(() => {
-                // Check if the iframe source is accessible and loaded
-                if (iframe.src && iframe.src !== '') {
-                    // If iframe hasn't triggered load event within 8 seconds, show error
-                    showGameError();
+                const currentSrc = iframe.src;
+                
+                // Clear any existing timeout
+                if (iframeLoadTimeout) {
+                    clearTimeout(iframeLoadTimeout);
+                    iframeLoadTimeout = null;
                 }
-            }, 8000);
+                
+                // Hide error and show iframe
+                hideGameError();
+                
+                // Force reload by clearing and resetting src
+                iframe.src = '';
+                
+                // Use requestAnimationFrame instead of setTimeout for better performance
+                requestAnimationFrame(function() {
+                    requestAnimationFrame(function() {
+                        iframe.src = currentSrc;
+                        
+                        // Set new timeout for retry attempt
+                        iframeLoadTimeout = window.setTimeout(function() {
+                            showGameError();
+                        }, 8000);
+                    });
+                });
+            }
             
-            // Listen for iframe load event
-            iframe.addEventListener('load', function() {
-                clearTimeout(iframeLoadTimeout);
-                try {
-                    // Try to access iframe content to verify it loaded successfully
-                    const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
-                    if (iframeDoc && iframeDoc.body) {
-                        // Iframe loaded successfully
-                        document.getElementById('gameError').style.display = 'none';
-                        document.getElementById('gameFrame').style.display = 'block';
-                    } else {
-                        // Iframe loaded but content might be blocked
-                        throw new Error('Content blocked');
+            // Make retryGame globally available
+            window.retryGame = retryGame;
+            
+            // Initialize when DOM is ready
+            document.addEventListener('DOMContentLoaded', function() {
+                const iframe = document.getElementById('gameFrame');
+                if (!iframe) return;
+                
+                // Set initial timeout to check iframe loading
+                iframeLoadTimeout = window.setTimeout(function() {
+                    if (iframe.src && iframe.src !== '') {
+                        showGameError();
                     }
-                } catch (e) {
-                    // Cross-origin or other access error - iframe might still work for user
-                    // Don't show error immediately, let user interact first
-                    console.log('Iframe loaded but content access restricted');
-                }
+                }, 8000);
+                
+                // Listen for iframe load event
+                iframe.addEventListener('load', function() {
+                    if (iframeLoadTimeout) {
+                        clearTimeout(iframeLoadTimeout);
+                        iframeLoadTimeout = null;
+                    }
+                    
+                    try {
+                        // Try to access iframe content to verify it loaded successfully
+                        const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+                        if (iframeDoc && iframeDoc.body) {
+                            hideGameError();
+                        }
+                    } catch (e) {
+                        // Cross-origin restrictions are normal for external iframes
+                        // Don't show error unless there's a real loading problem
+                        hideGameError();
+                    }
+                });
+                
+                // Listen for iframe error event
+                iframe.addEventListener('error', function() {
+                    if (iframeLoadTimeout) {
+                        clearTimeout(iframeLoadTimeout);
+                        iframeLoadTimeout = null;
+                    }
+                    showGameError();
+                });
             });
-            
-            // Listen for iframe error event
-            iframe.addEventListener('error', function() {
-                clearTimeout(iframeLoadTimeout);
-                showGameError();
-            });
-        });
-        
-        // Remove the unused alternative URL functionality since it's redundant
-        // The direct link button provides better user experience
+        })();
     </script>
 </body>
 </html>
