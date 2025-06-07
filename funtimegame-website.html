@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FunTime Game - Play Free Online Adventure Game | funtimegame.online</title>
+    <meta name="description" content="Play FunTime Game online for free! Experience exciting adventures, challenging puzzles, and endless fun in this immersive browser game. No download required.">
+    <meta name="keywords" content="funtimegame, funtime game, online game, free game, browser game, adventure game, puzzle game">
+    <meta name="author" content="FunTime Game">
+    <meta property="og:title" content="FunTime Game - Play Free Online Adventure Game">
+    <meta property="og:description" content="Experience exciting adventures and challenging puzzles in FunTime Game. Play now for free!">
+    <meta property="og:url" content="https://funtimegame.online">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="FunTime Game">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="FunTime Game - Play Free Online Adventure Game">
+    <meta name="twitter:description" content="Experience exciting adventures and challenging puzzles in FunTime Game. Play now for free!">
+    <link rel="canonical" href="https://funtimegame.online">
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            color: #1d1d1f;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            padding: 15px 0;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #007aff, #5856d6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #1d1d1f;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: #007aff;
+        }
+
+        .hero {
+            text-align: center;
+            padding: 80px 0;
+            background: linear-gradient(135deg, rgba(0, 122, 255, 0.1), rgba(88, 86, 214, 0.1));
+        }
+
+        h1 {
+            font-size: clamp(3rem, 8vw, 5rem);
+            font-weight: 800;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #007aff, #5856d6, #af52de);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -0.02em;
+        }
+
+        .hero-subtitle {
+            font-size: clamp(1.2rem, 3vw, 1.5rem);
+            color: #86868b;
+            margin-bottom: 40px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .game-section {
+            padding: 60px 0;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            margin: 40px 0;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            font-size: clamp(2rem, 5vw, 2.5rem);
+            font-weight: 700;
+            margin-bottom: 30px;
+            color: #1d1d1f;
+            text-align: center;
+        }
+
+        .game-iframe-container {
+            position: relative;
+            width: 100%;
+            max-width: 900px;
+            margin: 0 auto 40px;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+            background: #000;
+        }
+
+        .game-iframe-container::before {
+            content: '';
+            display: block;
+            padding-top: 56.25%; /* 16:9 aspect ratio */
+        }
+
+        .game-iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+            border-radius: 20px;
+        }
+
+        .play-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: linear-gradient(135deg, #007aff, #5856d6);
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 50px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            text-decoration: none;
+            margin: 20px 0;
+        }
+
+        .play-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0, 122, 255, 0.3);
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin: 60px 0;
+        }
+
+        .feature-card {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(20px);
+            padding: 40px;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            margin: 0 auto 20px;
+            background: linear-gradient(135deg, #007aff, #5856d6);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: white;
+        }
+
+        .description-section {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(20px);
+            padding: 60px 0;
+            border-radius: 20px;
+            margin: 40px 0;
+        }
+
+        .description-content {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .description-content p {
+            font-size: 18px;
+            line-height: 1.8;
+            color: #424245;
+            margin-bottom: 20px;
+        }
+
+        .stats {
+            display: flex;
+            justify-content: center;
+            gap: 60px;
+            margin: 40px 0;
+            flex-wrap: wrap;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #007aff, #5856d6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-label {
+            font-size: 16px;
+            color: #86868b;
+            font-weight: 500;
+        }
+
+        footer {
+            background: #1d1d1f;
+            color: white;
+            text-align: center;
+            padding: 40px 0;
+            margin-top: 80px;
+        }
+
+        .footer-content {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            color: #86868b;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: #007aff;
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .hero {
+                padding: 60px 0;
+            }
+            
+            .features {
+                grid-template-columns: 1fr;
+            }
+            
+            .stats {
+                gap: 30px;
+            }
+            
+            .stat-number {
+                font-size: 2rem;
+            }
+            
+            .game-section, .description-section {
+                margin: 20px 0;
+                padding: 40px 0;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 0 15px;
+            }
+            
+            .feature-card {
+                padding: 30px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">FunTime Game</div>
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="#play">Play Now</a></li>
+                        <li><a href="#features">Features</a></li>
+                        <li><a href="#about">About</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div class="container">
+                <h1>FunTime Game</h1>
+                <p class="hero-subtitle">Experience endless adventures and challenging puzzles in the ultimate online gaming experience</p>
+                <a href="#play" class="play-button">
+                    ▶ Start Playing Now
+                </a>
+            </div>
+        </section>
+
+        <section id="play" class="game-section">
+            <div class="container">
+                <h2>Play FunTime Game Online</h2>
+                <div class="game-iframe-container">
+                    <iframe 
+                        class="game-iframe"
+                        src="https://cloud.onlinegames.io/games/2025/unity/funtimegame/index-og.HTML"
+                        title="FunTime Game - Play Online"
+                        allowfullscreen
+                        loading="lazy">
+                    </iframe>
+                </div>
+                <p style="text-align: center; color: #86868b; font-size: 16px;">
+                    Click to start your adventure! No download required - play instantly in your browser.
+                </p>
+            </div>
+        </section>
+
+        <section id="features" class="features">
+            <div class="container">
+                <div class="feature-card">
+                    <div class="feature-icon">🎮</div>
+                    <h3>Instant Play</h3>
+                    <p>Jump right into the action with no downloads or installations required. Play directly in your browser on any device.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">🌟</div>
+                    <h3>Engaging Gameplay</h3>
+                    <p>Experience captivating adventures with challenging puzzles, exciting quests, and immersive storylines that keep you coming back.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">📱</div>
+                    <h3>Cross-Platform</h3>
+                    <p>Enjoy seamless gaming across all devices - desktop, tablet, or mobile. Your progress syncs automatically wherever you play.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="about" class="description-section">
+            <div class="container">
+                <div class="description-content">
+                    <h2>About FunTime Game</h2>
+                    <p>
+                        FunTime Game delivers an extraordinary online gaming experience that combines classic adventure elements with modern gameplay mechanics. Designed for players of all skill levels, this browser-based game offers hours of entertainment without requiring any downloads or installations.
+                    </p>
+                    <p>
+                        Navigate through beautifully crafted levels, solve intricate puzzles, and discover hidden secrets in a world filled with challenges and rewards. The game features intuitive controls, stunning visuals, and an engaging soundtrack that enhances every moment of your journey.
+                    </p>
+                    <p>
+                        Built with cutting-edge web technology, FunTime Game runs smoothly on all modern browsers and devices. Whether you're playing on your computer during a break or on your phone while commuting, the experience remains consistently excellent and fully responsive.
+                    </p>
+                </div>
+                
+                <div class="stats">
+                    <div class="stat-item">
+                        <div class="stat-number">100K+</div>
+                        <div class="stat-label">Players Worldwide</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">50+</div>
+                        <div class="stat-label">Challenging Levels</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">4.8★</div>
+                        <div class="stat-label">Player Rating</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="game-section">
+            <div class="container">
+                <h2>Game Features & Mechanics</h2>
+                <div class="description-content">
+                    <p>
+                        FunTime Game incorporates innovative gameplay mechanics that blend strategy, skill, and creativity. Players can explore vast environments, collect unique items, and unlock special abilities as they progress through the game's compelling narrative.
+                    </p>
+                    <p>
+                        The game features a dynamic difficulty system that adapts to your playing style, ensuring optimal challenge and engagement. With regular content updates and seasonal events, there's always something new to discover in the FunTime Game universe.
+                    </p>
+                    <p>
+                        Advanced graphics optimization ensures smooth performance across all devices, while the responsive design guarantees an excellent user experience whether you're playing on a high-end gaming setup or a mobile device during your daily commute.
+                    </p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-links">
+                    <a href="#privacy">Privacy Policy</a>
+                    <a href="#terms">Terms of Service</a>
+                    <a href="#contact">Contact Us</a>
+                    <a href="#support">Support</a>
+                </div>
+                <p>&copy; 2025 FunTime Game. All rights reserved. | funtimegame.online</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
